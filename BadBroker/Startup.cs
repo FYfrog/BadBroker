@@ -1,5 +1,6 @@
 using System.Net;
 using BadBroker.Infrastructure;
+using BadBroker.Infrastructure.Exceptions;
 using BadBroker.Services.ExchangeRateIntegration;
 using BadBroker.Services.ExchangeRateIntegration.ExchangeRatesApiIoIntegration;
 using BadBroker.Services.RevenueCalculation;
@@ -55,16 +56,24 @@ namespace BadBroker
                 {
                     var loggerFactory = context.RequestServices.GetService<ILoggerFactory>();
                     var logger = loggerFactory.CreateLogger("ErrorMiddleware");
+                    
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
+                    
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if(contextFeature != null)
                     { 
                         logger.LogError($"{contextFeature.Error}");
+
+                        var responseErrorMessage = "Internal Server Error";
+
+                        if (contextFeature.Error is ValidationException)
+                            responseErrorMessage += ": " + contextFeature.Error.Message;
+                        
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error."
+                            Message = responseErrorMessage
                         }.ToString());
                     }
                 });
