@@ -1,4 +1,5 @@
 using System.Net;
+using BadBroker.Configs;
 using BadBroker.Infrastructure;
 using BadBroker.Infrastructure.Exceptions;
 using BadBroker.Services.ExchangeRateIntegration;
@@ -38,6 +39,9 @@ namespace BadBroker
             services.AddSingleton<RevenueCalculatorService, RevenueCalculatorService>();
 
             services.AddLogging(builder => builder.AddSimpleConsole());
+
+            services.AddOptions<ExchangeRatesApiIoOptions>()
+                .BindConfiguration(ExchangeRatesApiIoOptions.ExchangeRatesApiIo);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,23 +5,27 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using BadBroker.Configs;
 using BadBroker.Models;
 using BadBroker.Services.ExchangeRateIntegration.Requests;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace BadBroker.Services.ExchangeRateIntegration.ExchangeRatesApiIoIntegration
 {
     public class ExchangeRatesApiIoIntegrationService : IExchangeRateIntegrationService
     {
         private readonly ILogger<ExchangeRatesApiIoIntegrationService> _logger;
-        private const string ApiKey = "Be0yIgc3JBzMy3upqyE8ChTe6y973Bxm";
+        private readonly ExchangeRatesApiIoOptions _apiConfig;
         private const string DateFormat = "yyyy-MM-dd";
         
         private readonly HttpClient _httpClient;
 
-        public ExchangeRatesApiIoIntegrationService(ILogger<ExchangeRatesApiIoIntegrationService> logger)
+        public ExchangeRatesApiIoIntegrationService(ILogger<ExchangeRatesApiIoIntegrationService> logger,
+            IOptions<ExchangeRatesApiIoOptions> apiConfig)
         {
             _logger = logger;
+            _apiConfig = apiConfig.Value ?? throw new ArgumentNullException(nameof(apiConfig));
             _httpClient = new HttpClient();
         }
 
@@ -30,7 +34,7 @@ namespace BadBroker.Services.ExchangeRateIntegration.ExchangeRatesApiIoIntegrati
             var httpRequestMessage = new HttpRequestMessage
             {
                 RequestUri = GetUri(request),
-                Headers = { { "apikey", ApiKey } },
+                Headers = { { "apikey", _apiConfig.ApiKey } },
                 Method = HttpMethod.Get
             };
 
