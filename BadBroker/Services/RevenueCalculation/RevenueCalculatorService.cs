@@ -33,7 +33,7 @@ namespace BadBroker.Services.RevenueCalculation
             });
 
 
-            decimal maxCurrencyRevenue = default;
+            decimal maxCurrencyRevenue = request.MoneyUsd;
             DateTime buyDate = default;
             DateTime sellDate = default;
             Currency maxRevenueCurrency = default;
@@ -50,10 +50,12 @@ namespace BadBroker.Services.RevenueCalculation
                     for (var j = i + 1; j < currencyRateHistory.Count; j++)
                     {
                         var closeCurrencyRate = currencyRateHistory[j];
-                        var positionOpenedDays = j - i;
+                        var positionOpenedDays = (int) (currencyRateHistory[j].Date - currencyRateHistory[i].Date).TotalDays;
 
-                        var currentCurrencyRevenue =
-                            openCurrencyRate.Rate.Value * request.MoneyUsd / closeCurrencyRate.Rate.Value - positionOpenedDays * brokerFeeUsd;
+                        var cleanRevenue = openCurrencyRate.Rate.Value * request.MoneyUsd / closeCurrencyRate.Rate.Value;
+                        var brokerFee = positionOpenedDays * brokerFeeUsd;
+                        var currentCurrencyRevenue = Math.Round(cleanRevenue, 2, MidpointRounding.ToNegativeInfinity)
+                                                     - brokerFee;
 
                         if (currentCurrencyRevenue > maxCurrencyRevenue)
                         {
@@ -65,9 +67,6 @@ namespace BadBroker.Services.RevenueCalculation
                     }
                 }
             }
-
-            if (maxCurrencyRevenue == default)
-                return new CalculateRevenueResponse();
 
             return new CalculateRevenueResponse
             {
