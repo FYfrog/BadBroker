@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBroker", "BadBroker\BadBroker.csproj", "{EFD814ED-CEB9-46E4-A60F-9D191B06E053}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{BBCE100D-D4E8-4C8E-B339-3039AE0EC396}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{EFD814ED-CEB9-46E4-A60F-9D191B06E053}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFD814ED-CEB9-46E4-A60F-9D191B06E053}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFD814ED-CEB9-46E4-A60F-9D191B06E053}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBCE100D-D4E8-4C8E-B339-3039AE0EC396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBCE100D-D4E8-4C8E-B339-3039AE0EC396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBCE100D-D4E8-4C8E-B339-3039AE0EC396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBCE100D-D4E8-4C8E-B339-3039AE0EC396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

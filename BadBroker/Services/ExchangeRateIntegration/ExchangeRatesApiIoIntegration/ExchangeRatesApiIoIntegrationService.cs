@@ -74,15 +74,11 @@ namespace BadBroker.Services.ExchangeRateIntegration.ExchangeRatesApiIoIntegrati
             {
                 StartDate = httpResponse.StartDate,
                 EndDate = httpResponse.EndDate,
-                Rates = httpResponse.RatesOnDate.Select(kvp => new RatesOnDate
-                    {
-                        Date = kvp.Key,
-                        Rates = kvp.Value.CurrencyToRateDictionary.Select(v => new Rate
-                        {
-                            Currency = Currency.GetByCode(v.Key),
-                            Value = v.Value.GetDecimal()
-                        }).ToList()
-                    })
+                Rates = httpResponse.RatesOnDate
+                    .Select(kvp => new RatesOnDate(kvp.Key,
+                        kvp.Value.CurrencyToRateDictionary
+                            .Select(v => new Rate(Currency.GetByCode(v.Key), v.Value.GetDecimal()))
+                            .ToList()))
                     .OrderBy(i => i.Date)
                     .ToList()
             };
